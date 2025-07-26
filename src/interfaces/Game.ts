@@ -1,4 +1,4 @@
-import type { Category } from "../enums/Category";
+import type { Category } from "../enums/category";
 
 export type Game = {
   id: number;

@@ -23,5 +23,6 @@ app.route("/games/delete/:id", gamesRouter);
 app.route("/users", userRouter);
 app.route("/users/:id", userRouter);
 app.route("/users/create", userRouter);
+app.route("/users/soft-delete/:id", userRouter);
 
 export default app;

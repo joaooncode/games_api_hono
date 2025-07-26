@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 
 import { userZodSchema } from "../database/schema/zod-schema";
-import { createUser, findAllUsers, findUserById } from "../services/user-service";
+import { createUser, findAllUsers, findUserById, softDeleteUser } from "../services/user-service";
 
 // GET
 export async function getAllUsers(c: Context) {
@@ -40,6 +40,23 @@ export async function createNewUser(c: Context) {
   }
   catch (error) {
     console.error("Error creating user:", error);
+    return c.json({ error: "Internal Server Error" }, 500);
+  }
+}
+
+// DELETE (soft delete)
+
+export async function deleteUser(c: Context) {
+  try {
+    const id = Number(c.req.param("id"));
+    const success = await softDeleteUser(id);
+    if (!success) {
+      return c.json({ error: "User not found or could not be deleted" }, 404);
+    }
+    return c.json({ message: "User deleted successfully" }, 200);
+  }
+  catch (error) {
+    console.error("Error deleting user:", error);
     return c.json({ error: "Internal Server Error" }, 500);
   }
 }

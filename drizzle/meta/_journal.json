@@ -15,6 +15,20 @@
       "when": 1753556686116,
       "tag": "0001_talented_omega_red",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753562254838,
+      "tag": "0002_elite_steel_serpent",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1753563251455,
+      "tag": "0003_bumpy_quentin_quire",
+      "breakpoints": true
     }
   ]
 }
