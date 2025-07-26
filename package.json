@@ -1,20 +1,27 @@
 {
   "name": "server",
-  "module": "index.ts",
   "type": "module",
   "private": true,
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/pg": "^8.15.4"
+  "module": "index.ts",
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "@antfu/eslint-config": "^5.0.0",
     "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.3",
+    "eslint": "^9.32.0",
     "hono": "^4.8.7",
     "pg": "^8.16.3",
     "zod": "^4.0.10"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.15.4",
+    "eslint-plugin-format": "^1.0.1"
   }
 }

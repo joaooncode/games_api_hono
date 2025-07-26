@@ -1,12 +1,12 @@
 import { Hono } from "hono";
 
 import {
+  createGame,
+  deleteGame,
   getAllGames,
   getGameById,
-  createGame,
   updateGame,
-  deleteGame,
-} from "../controllers/gameController";
+} from "../controllers/game-controller";
 
 const gamesRouter = new Hono();
 

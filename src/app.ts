@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
+
 import { gamesRouter } from "../src/routes/games";
 
 const app = new Hono();

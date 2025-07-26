@@ -1,7 +1,9 @@
-import { db } from "../database/db";
-import { eq, not } from "drizzle-orm";
-import { gameTable } from "../database/schema/GameSchema";
+import { eq } from "drizzle-orm";
+
 import type { Game } from "../interfaces/Game";
+
+import { db } from "../database/db";
+import { gameTable } from "../database/schema/game-schema";
 
 export async function findAllGames() {
   return db.select().from(gameTable).orderBy(gameTable.id);
@@ -19,7 +21,8 @@ export async function createGame(game: Omit<Game, "id">) {
   try {
     const inserted = await db.insert(gameTable).values(game).returning();
     return inserted[0];
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error creating game:", error);
   }
 }
@@ -35,7 +38,8 @@ export async function updateGame(id: number, game: Partial<Omit<Game, "id">>) {
       return null;
     }
     return updated[0];
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error updating game:", error);
   }
 }
@@ -50,7 +54,8 @@ export async function deleteGame(id: number) {
       return null;
     }
     return deleted[0];
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error deleting game:", error);
   }
 }

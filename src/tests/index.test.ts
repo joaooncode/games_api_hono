@@ -1,7 +1,8 @@
-import { expect, test, describe } from "bun:test";
+import { describe, expect, test } from "bun:test";
+
 import app from "../app";
 
-app.get("/games", (c) => c.text("Many games"));
+app.get("/games", c => c.text("Many games"));
 
 describe("Example", () => {
   test("GET /games", async () => {

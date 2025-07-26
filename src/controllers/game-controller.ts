@@ -1,16 +1,16 @@
 import type { Context } from "hono";
-import {
-  gameZodSchema,
-  gameUpdateZodSchema,
-} from "../database/schema/zodSchema";
 
 import {
+  gameUpdateZodSchema,
+  gameZodSchema,
+} from "../database/schema/zod-schema";
+import {
+  createGame as createGameService,
+  deleteGame as deleteGameService,
   findAllGames,
   findGameById,
-  createGame as createGameService,
   updateGame as updateGameService,
-  deleteGame as deleteGameService,
-} from "../services/gameService";
+} from "../services/game-service";
 
 // GET
 export async function getAllGames(c: Context) {

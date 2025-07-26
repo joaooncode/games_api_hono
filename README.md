@@ -1,7 +1,7 @@
 # 🚚 Hono Games API 🎮
 
-Bem-vindo ao **Hono Games API**!  
-Este projeto é uma API RESTful para gerenciamento de jogos, construída com [Hono](https://hono.dev/), [Drizzle ORM](https://orm.drizzle.team/), [Postgres Neon](https://neon.tech/) e [Bun](https://bun.sh/).  
+Bem-vindo ao **Hono Games API**!
+Este projeto é uma API RESTful para gerenciamento de jogos, construída com [Hono](https://hono.dev/), [Drizzle ORM](https://orm.drizzle.team/), [Postgres Neon](https://neon.tech/) e [Bun](https://bun.sh/).
 Ideal para quem quer aprender, testar ou construir sistemas modernos de backend com TypeScript!
 
 ---
@@ -101,7 +101,7 @@ bun test
 
 ## 🤝 Contribua!
 
-Sinta-se livre para abrir issues, enviar PRs ou sugerir melhorias.  
+Sinta-se livre para abrir issues, enviar PRs ou sugerir melhorias.
 Este projeto é perfeito para estudos, portfólios e experimentação com o ecossistema TypeScript moderno.
 
 ---
