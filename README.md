@@ -20,6 +20,32 @@ Ideal para quem quer aprender, testar ou construir sistemas modernos de backend 
 
 1. Instale as dependências:
 
+# 🚚 Hono Games API 🎮
+
+Bem-vindo ao **Hono Games API**!  
+Este projeto é uma API RESTful para gerenciamento de jogos, construída com [Hono](https://hono.dev/), [Drizzle ORM](https://orm.drizzle.team/), [Postgres Neon](https://neon.tech/) e [Bun](https://bun.sh/).  
+Ideal para quem quer aprender, testar ou construir sistemas modernos de backend com TypeScript!
+
+---
+
+## ✨ Funcionalidades
+
+- **CRUD completo de jogos**: crie, liste, edite e remova jogos.
+- **Validação robusta**: todos os dados são validados com [Zod](https://zod.dev/).
+- **Enum de categorias**: Bronze, Silver, Gold, Platinum, Diamond.
+- **Testes automatizados**: cobertura para todas as rotas usando Bun Test.
+- **Estrutura escalável**: controllers, services e schemas separados.
+
+---
+
+## 🚀 Como rodar
+
+1. Instale as dependências:
+
+   ```bash
+   bun install
+   ```
+
    ```bash
    bun install
    ```
@@ -32,12 +58,24 @@ Ideal para quem quer aprender, testar ou construir sistemas modernos de backend 
    ```
 
 3. Inicie o servidor:
+4. Configure o banco Neon no arquivo `.env`:
+
+   ```
+   DB_CONNECTION_STRING=postgresql://usuario:senha@host/database?sslmode=require
+   PORT=3000
+   ```
+
+5. Inicie o servidor:
 
    ```bash
    bun run index.ts
    ```
 
-4. Acesse a API em `http://localhost:3000/games`
+   ```bash
+   bun run index.ts
+   ```
+
+6. Acesse a API em `http://localhost:3000/games`
 
 ---
 
