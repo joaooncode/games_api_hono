@@ -10,3 +10,9 @@ export const gameZodSchema = z.object({
 });
 
 export const gameUpdateZodSchema = gameZodSchema.partial();
+
+export const userZodSchema = z.object({
+  username: z.string().max(100),
+  password: z.string().min(6),
+  isAdmin: z.boolean().default(false),
+});

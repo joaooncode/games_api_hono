@@ -5,13 +5,18 @@
   "module": "index.ts",
   "scripts": {
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
     "@antfu/eslint-config": "^5.0.0",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.3",
     "eslint": "^9.32.0",
@@ -20,8 +25,10 @@
     "zod": "^4.0.10"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/bun": "latest",
     "@types/pg": "^8.15.4",
+    "drizzle-kit": "^0.31.4",
     "eslint-plugin-format": "^1.0.1"
   }
 }
