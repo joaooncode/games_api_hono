@@ -7,25 +7,23 @@ import {
   getGameById,
   updateGame,
 } from "../controllers/game-controller";
-import { basicAuth } from "../middlewares/basic-auth";
+import { adminAuth, basicAuth } from "../middlewares/basic-auth";
 
 const gamesRouter = new Hono();
 
-gamesRouter.use("*", basicAuth);
-
 // Get all games
-gamesRouter.get("/", getAllGames);
+gamesRouter.get("/", basicAuth, getAllGames);
 
 // Get a game by ID
-gamesRouter.get("/:id", getGameById);
+gamesRouter.get("/:id", basicAuth, getGameById);
 
 // Create a new game
-gamesRouter.post("/create", createGame);
+gamesRouter.post("/create", basicAuth, adminAuth, createGame);
 
 // Update a game by ID
-gamesRouter.put("/update/:id", updateGame);
+gamesRouter.put("/update/:id", basicAuth, adminAuth, updateGame);
 
 // Delete a game by ID
-gamesRouter.delete("/delete/:id", deleteGame);
+gamesRouter.delete("/delete/:id", basicAuth, adminAuth, deleteGame);
 
 export { gamesRouter };
