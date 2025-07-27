@@ -1,12 +1,13 @@
 import type { Context } from "hono";
 
 import bcrypt from "bcrypt";
-import { eq, isNull } from "drizzle-orm";
+import { and, eq, isNotNull, isNull } from "drizzle-orm";
 
 import type { User } from "../interfaces/user";
 
 import { db } from "../database/db";
 import { users as usersTable } from "../database/schema/user-schema";
+import { userUpdateZodSchema } from "../database/schema/zod-schema";
 
 export async function findAllUsers() {
   try {
@@ -29,7 +30,7 @@ export async function findUserById(id: number) {
   try {
     const user = await db.select()
       .from(usersTable)
-      .where(eq(usersTable.id, id) && isNull(usersTable.deletedAt));
+      .where(and(eq(usersTable.id, id), isNull(usersTable.deletedAt)));
     if (!user || user.length === 0) {
       return null;
     }
@@ -41,7 +42,7 @@ export async function findUserById(id: number) {
   }
 }
 
-export async function createUser(user: Omit<User, "id" | "createdAt" | "updatedAt">) {
+export async function createUser(user: Omit<User, "id" | "createdAt" | "updatedAt" | "deletedAt">) {
   try {
     // Hash senha
     const saltRounds = 10;
@@ -58,8 +59,41 @@ export async function createUser(user: Omit<User, "id" | "createdAt" | "updatedA
   }
 }
 
+export async function updateUser(id: number, user: Partial<User>) {
+  try {
+    const { username } = user;
+    if (!username) {
+      return null;
+    }
+    const validatedUser = userUpdateZodSchema.safeParse(user);
+    if (!validatedUser.success) {
+      console.error("Validation failed:", validatedUser.error);
+      return null;
+    }
+    const updated = await db
+      .update(usersTable)
+      .set(validatedUser.data)
+      .where(eq(usersTable.id, id))
+      .returning();
+
+    return updated[0];
+  }
+  catch (error) {
+    console.error("Error updating user:", error);
+    return null;
+  }
+}
+
 export async function softDeleteUser(id: number) {
   try {
+    const user = await db.select()
+      .from(usersTable)
+      .where(and(eq(usersTable.id, id), isNull(usersTable.deletedAt)));
+
+    if (!user || user.length === 0) {
+      return false;
+    }
+
     const now = new Date();
     await db.update(usersTable)
       .set({ deletedAt: now })
@@ -68,6 +102,27 @@ export async function softDeleteUser(id: number) {
   }
   catch (error) {
     console.error("Error soft deleting user:", error);
+    return false;
+  }
+}
+
+export async function restoreUser(id: number) {
+  try {
+    const user = await db.select()
+      .from(usersTable)
+      .where(eq(usersTable.id, id) && isNotNull(usersTable.deletedAt));
+
+    if (!user || user.length === 0) {
+      return false;
+    }
+
+    await db.update(usersTable)
+      .set({ deletedAt: null })
+      .where(eq(usersTable.id, id));
+    return true;
+  }
+  catch (error) {
+    console.error("Error restoring user:", error);
     return false;
   }
 }

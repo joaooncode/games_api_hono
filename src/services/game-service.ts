@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 
-import type { Game } from "../interfaces/Game";
+import type { Game } from "../interfaces/game";
 
 import { db } from "../database/db";
 import { gameTable } from "../database/schema/game-schema";

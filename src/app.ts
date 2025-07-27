@@ -24,5 +24,7 @@ app.route("/users", userRouter);
 app.route("/users/:id", userRouter);
 app.route("/users/create", userRouter);
 app.route("/users/soft-delete/:id", userRouter);
+app.route("/users/restore/:id", userRouter);
+app.route("/users/update/:id", userRouter);
 
 export default app;

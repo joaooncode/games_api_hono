@@ -16,3 +16,5 @@ export const userZodSchema = z.object({
   password: z.string().min(6),
   isAdmin: z.boolean().default(false),
 });
+
+export const userUpdateZodSchema = userZodSchema.partial();

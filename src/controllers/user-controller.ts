@@ -1,7 +1,9 @@
 import type { Context } from "hono";
 
-import { userZodSchema } from "../database/schema/zod-schema";
-import { createUser, findAllUsers, findUserById, softDeleteUser } from "../services/user-service";
+import { number } from "zod";
+
+import { userUpdateZodSchema, userZodSchema } from "../database/schema/zod-schema";
+import { createUser, findAllUsers, findUserById, restoreUser, softDeleteUser, updateUser } from "../services/user-service";
 
 // GET
 export async function getAllUsers(c: Context) {
@@ -44,6 +46,28 @@ export async function createNewUser(c: Context) {
   }
 }
 
+// PUT (update user)
+export async function updateUserById(c: Context) {
+  try {
+    const id = Number(c.req.param("id"));
+    const userData = await c.req.json();
+    const validatedUser = userUpdateZodSchema.safeParse(userData);
+    if (!validatedUser.success) {
+      return c.json({ error: "Could not validate user data" }, 400);
+    }
+
+    const updatedUser = await updateUser(id, validatedUser.data);
+    if (!updatedUser) {
+      return c.json({ error: "User not found or could not be updated" }, 404);
+    }
+    return c.json(updatedUser, 200);
+  }
+  catch (error) {
+    console.error("Error updating user:", error);
+    return c.json({ error: "Internal Server Error" }, 500);
+  }
+}
+
 // DELETE (soft delete)
 
 export async function deleteUser(c: Context) {
@@ -57,6 +81,22 @@ export async function deleteUser(c: Context) {
   }
   catch (error) {
     console.error("Error deleting user:", error);
+    return c.json({ error: "Internal Server Error" }, 500);
+  }
+}
+
+// PUT (restore user)
+export async function restoreUserById(c: Context) {
+  try {
+    const id = Number(c.req.param("id"));
+    const success = await restoreUser(id);
+    if (!success) {
+      return c.json({ error: "User not found or could not be restored" }, 404);
+    }
+    return c.json({ message: "User restored successfully" }, 200);
+  }
+  catch (error) {
+    console.error("Error restoring user:", error);
     return c.json({ error: "Internal Server Error" }, 500);
   }
 }
