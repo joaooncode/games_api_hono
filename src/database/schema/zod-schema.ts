@@ -17,4 +17,6 @@ export const userZodSchema = z.object({
   isAdmin: z.boolean().default(false),
 });
 
-export const userUpdateZodSchema = userZodSchema.partial();
+export const userUpdateZodSchema = z.object({
+  username: z.string().min(3).max(100),
+}).strict();

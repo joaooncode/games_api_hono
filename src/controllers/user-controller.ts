@@ -48,8 +48,14 @@ export async function createNewUser(c: Context) {
 export async function updateUserById(c: Context) {
   try {
     const id = Number(c.req.param("id"));
+
     const userData = await c.req.json();
-    const validatedUser = userUpdateZodSchema.safeParse(userData);
+
+    const allowedData = {
+      username: userData.username,
+    };
+
+    const validatedUser = userUpdateZodSchema.safeParse(allowedData);
     if (!validatedUser.success) {
       return c.json({ error: "Could not validate user data" }, 400);
     }
