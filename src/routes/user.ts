@@ -8,9 +8,9 @@ import { basicAuth } from "../middlewares/basic-auth";
 const userRouter = new Hono();
 
 userRouter.get("/", requireAdmin, getAllUsers);
-userRouter.get("/:id", requireAdminOrOwner, getUserById);
+userRouter.get("/:id", basicAuth, requireAdminOrOwner, getUserById);
+userRouter.put("/update/:id", basicAuth, requireAdminOrOwner, updateUserById);
 userRouter.post("/create", createNewUser);
-userRouter.put("/update/:id", requireAdminOrOwner, updateUserById);
 userRouter.delete("/soft-delete/:id", requireAdmin, deleteUser);
 userRouter.put("/restore/:id", requireAdmin, restoreUserById);
 export { userRouter };

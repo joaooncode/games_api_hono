@@ -44,6 +44,8 @@ export const basicAuth: MiddlewareHandler = async (c, next) => {
     if (!valid) {
       return c.json({ error: "Invalid credentials" }, 401);
     }
+    // Adiciona o usuário ao contexto
+    c.set("user", user);
 
     // Usuário autenticado, segue para a rota
     await next();
