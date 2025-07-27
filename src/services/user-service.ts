@@ -1,5 +1,3 @@
-import type { Context } from "hono";
-
 import bcrypt from "bcrypt";
 import { and, eq, isNotNull, isNull } from "drizzle-orm";
 

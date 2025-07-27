@@ -1,7 +1,5 @@
 import type { Context } from "hono";
 
-import { number } from "zod";
-
 import { userUpdateZodSchema, userZodSchema } from "../database/schema/zod-schema";
 import { createUser, findAllUsers, findUserById, restoreUser, softDeleteUser, updateUser } from "../services/user-service";
 

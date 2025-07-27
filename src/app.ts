@@ -13,18 +13,7 @@ app.onError((err, c) => {
   return c.json({ error: "Internal Server Error" }, 500);
 });
 
-app.route("/", gamesRouter);
-app.route("/games/:id", gamesRouter);
-app.route("/games/create", gamesRouter);
-app.route("/games/update/:id", gamesRouter);
-app.route("/games/delete/:id", gamesRouter);
-
-// Users
+app.route("/games", gamesRouter);
 app.route("/users", userRouter);
-app.route("/users/:id", userRouter);
-app.route("/users/create", userRouter);
-app.route("/users/soft-delete/:id", userRouter);
-app.route("/users/restore/:id", userRouter);
-app.route("/users/update/:id", userRouter);
 
 export default app;
