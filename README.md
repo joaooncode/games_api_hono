@@ -1,7 +1,7 @@
 # 🚚 Hono Games API 🎮
 
 Bem-vindo ao **Hono Games API**!
-Este projeto é uma API RESTful para gerenciamento de jogos, construída com [Hono](https://hono.dev/), [Drizzle ORM](https://orm.drizzle.team/), [Postgres Neon](https://neon.tech/) e [Bun](https://bun.sh/).
+Este projeto é uma API RESTful para gerenciamento de jogos e usuários, construída com [Hono](https://hono.dev/), [Drizzle ORM](https://orm.drizzle.team/), [Postgres Neon](https://neon.tech/) e [Bun](https://bun.sh/).
 Ideal para quem quer aprender, testar ou construir sistemas modernos de backend com TypeScript!
 
 ---
@@ -9,6 +9,9 @@ Ideal para quem quer aprender, testar ou construir sistemas modernos de backend 
 ## ✨ Funcionalidades
 
 - **CRUD completo de jogos**: crie, liste, edite e remova jogos.
+- **CRUD completo de usuários**: registre, liste, edite, remova e restaure usuários.
+- **Autenticação básica**: rotas protegidas por autenticação HTTP Basic.
+- **Autorização**: apenas admins podem listar/deletar/restaurar usuários; usuários comuns podem editar/ver apenas seu próprio perfil.
 - **Validação robusta**: todos os dados são validados com [Zod](https://zod.dev/).
 - **Enum de categorias**: Bronze, Silver, Gold, Platinum, Diamond.
 - **Testes automatizados**: cobertura para todas as rotas usando Bun Test.
@@ -24,46 +27,20 @@ Ideal para quem quer aprender, testar ou construir sistemas modernos de backend 
    bun install
    ```
 
-   ```bash
-   bun install
-   ```
-
 2. Configure o banco Neon no arquivo `.env`:
 
    ```
-   DB_CONNECTION_STRING=postgresql://usuario:senha@host/database?sslmode=require
-   PORT=3000
+   DATABASE_URL=postgresql://usuario:senha@host/database?sslmode=require
+   PORT=8000
    ```
 
 3. Inicie o servidor:
-4. Configure o banco Neon no arquivo `.env`:
-
-   ```
-   DB_CONNECTION_STRING=postgresql://usuario:senha@host/database?sslmode=require
-   PORT=3000
-   ```
-
-5. Inicie o servidor:
 
    ```bash
    bun run index.ts
    ```
 
-   ```bash
-   bun run index.ts
-   ```
-
-6. Acesse a API em `http://localhost:3000/games`
-
----
-
-## 🧪 Testes
-
-Execute os testes automatizados:
-
-```bash
-bun test
-```
+4. Acesse a API em `http://localhost:8000/games` ou `http://localhost:8000/users`
 
 ---
 
@@ -75,6 +52,7 @@ bun test
 - `/src/services` — Lógica de negócio e acesso ao banco
 - `/src/controllers` — Lógica das rotas
 - `/src/routes` — Definição das rotas Hono
+- `/src/middlewares` — Autenticação e autorização
 - `/src/tests` — Testes automatizados
 
 ---
@@ -91,11 +69,31 @@ bun test
 
 ## 🎲 Exemplos de uso
 
-- **GET** `/games` — Lista todos os jogos
-- **GET** `/games/id` — Busca um jogo pelo id
-- **POST** `/games/create` — Cria um novo jogo
-- **PUT** `/games/update/:id` — Atualiza um jogo
-- **DELETE** `/games/delete/:id` — Remove um jogo
+### Jogos
+
+- **GET** `/games` — Lista todos os jogos (autenticado)
+- **GET** `/games/:id` — Busca um jogo pelo id (autenticado)
+- **POST** `/games/create` — Cria um novo jogo (admin)
+- **PUT** `/games/update/:id` — Atualiza um jogo (admin)
+- **DELETE** `/games/delete/:id` — Remove um jogo (admin)
+
+### Usuários
+
+- **POST** `/users/create` — Registra novo usuário (público)
+- **GET** `/users` — Lista todos os usuários (admin)
+- **GET** `/users/:id` — Busca usuário pelo id (autenticado: admin ou dono)
+- **PUT** `/users/update/:id` — Atualiza usuário (autenticado: admin ou dono)
+- **DELETE** `/users/soft-delete/:id` — Remove usuário (admin)
+- **PUT** `/users/restore/:id` — Restaura usuário (admin)
+
+---
+
+## 🔒 Autenticação e Autorização
+
+- Use o header HTTP Basic Auth:
+  `Authorization: Basic <base64(username:password)>`
+- Apenas admins podem listar, deletar ou restaurar usuários.
+- Usuários comuns só podem acessar/editar seu próprio perfil.
 
 ---
 
