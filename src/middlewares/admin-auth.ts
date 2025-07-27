@@ -7,7 +7,7 @@ import { Buffer } from "node:buffer";
 import { db } from "../database/db";
 import { users as usersTable } from "../database/schema/user-schema";
 
-export const basicAuth: MiddlewareHandler = async (c, next) => {
+export const requireAdmin: MiddlewareHandler = async (c, next) => {
   const authHeader = c.req.header("authorization");
   if (!authHeader || !authHeader.startsWith("Basic ")) {
     return c.json({ error: "Unauthorized" }, 401);
@@ -45,27 +45,19 @@ export const basicAuth: MiddlewareHandler = async (c, next) => {
       return c.json({ error: "Invalid credentials" }, 401);
     }
 
-    // Usuário autenticado, segue para a rota
+    // Verifica se é admin
+    if (!user.isAdmin) {
+      return c.json({ error: "Admin access required" }, 403);
+    }
+
+    // Adiciona o usuário ao contexto
+    c.set("user", user);
+
+    // Usuário autenticado e é admin, segue para a rota
     await next();
   }
   catch (error) {
     console.error("Error during authentication:", error);
     return c.json({ error: "Authentication failed" }, 500);
   }
-};
-
-// Verifica se o usuário é admin
-
-export const adminAuth: MiddlewareHandler = async (c, next) => {
-  const user = c.get("user");
-
-  if (!user) {
-    return c.json({ error: "User not found in context" }, 401);
-  }
-
-  if (!user.isAdmin) {
-    return c.json({ error: "Forbidden: Admin access required" }, 403);
-  }
-
-  await next();
 };
