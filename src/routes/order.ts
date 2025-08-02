@@ -1,17 +1,17 @@
 import { Hono } from "hono";
 
 import { createOrder, getAllOrders, getOrderById } from "../controllers/order-controller";
-import { adminAuth, basicAuth } from "../middlewares/basic-auth";
+import { adminAuth, jwtAuth } from "../middlewares/jwt-auth";
 
 const ordersRouter = new Hono();
 
 // Get all orders
-ordersRouter.get("/", basicAuth, adminAuth, getAllOrders);
+ordersRouter.get("/", jwtAuth, adminAuth, getAllOrders);
 
 // Get order by ID
-ordersRouter.get("/:id", basicAuth, getOrderById);
+ordersRouter.get("/:id", jwtAuth, getOrderById);
 
 // Create a new order
-ordersRouter.post("/", basicAuth, createOrder);
+ordersRouter.post("/", jwtAuth, createOrder);
 
 export { ordersRouter };

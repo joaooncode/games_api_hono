@@ -29,13 +29,40 @@ export async function getUserById(c: Context) {
 
 export async function createNewUser(c: Context) {
   try {
+    // Verifica se há usuário autenticado (opcional para esta rota)
+    const authenticatedUser = c.get("user"); // undefined se não autenticado
+
     const userData = await c.req.json();
     const validatedUser = userZodSchema.safeParse(userData);
+
     if (!validatedUser.success) {
       return c.json({ error: "Could not validate user data" }, 400);
     }
 
-    const createdUser = await createUser(validatedUser.data);
+    // Validações de segurança
+    const { isAdmin, ...userDataToCreate } = validatedUser.data;
+
+    // Se usuário autenticado e não é admin, não pode criar admin
+    if (authenticatedUser && !authenticatedUser.isAdmin && isAdmin) {
+      return c.json({
+        error: "Only administrators can create admin users",
+      }, 403);
+    }
+
+    // Se não há usuário autenticado, não pode criar admin
+    if (!authenticatedUser && isAdmin) {
+      return c.json({
+        error: "Cannot create admin user without authentication",
+      }, 403);
+    }
+
+    // Cria usuário com isAdmin apenas se permitido
+    const finalUserData = {
+      ...userDataToCreate,
+      isAdmin: Boolean(isAdmin && authenticatedUser?.isAdmin),
+    };
+
+    const createdUser = await createUser(finalUserData);
     return c.json(createdUser, 201);
   }
   catch (error) {

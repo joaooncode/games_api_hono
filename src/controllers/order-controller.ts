@@ -2,7 +2,7 @@ import type { Context } from "hono";
 
 import type { NewOrder } from "../interfaces/new-order";
 
-import { orderRequestSchema, orderZodSchema } from "../database/schema/order-validation-schema";
+import { orderRequestSchema } from "../database/schema/order-validation-schema";
 import { findAllOrders, findOrderById, newOrder } from "../services/orders-service";
 
 // GET all orders

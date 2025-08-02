@@ -3,7 +3,7 @@ import type { Context } from "hono";
 import { eq } from "drizzle-orm";
 
 import type { NewOrder } from "../interfaces/new-order";
-import type { Order } from "../interfaces/order";
+// import type { Order } from "../interfaces/order";
 
 import { db } from "../database/db";
 import { gameTable } from "../database/schema/game-schema";

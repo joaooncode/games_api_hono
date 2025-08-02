@@ -1,4 +1,4 @@
-import { boolean, date, integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { date, integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
 import { gameTable } from "./game-schema";
 import { users } from "./user-schema";

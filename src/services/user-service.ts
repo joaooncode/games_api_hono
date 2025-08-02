@@ -40,8 +40,30 @@ export async function findUserById(id: number) {
   }
 }
 
+export async function findUserByEmail(email: string) {
+  try {
+    const user = await db.select()
+      .from(usersTable)
+      .where(and(eq(usersTable.email, email), isNull(usersTable.deletedAt)));
+    if (!user || user.length === 0) {
+      return null;
+    }
+    return user[0];
+  }
+  catch (error) {
+    console.error("Error fetching user by email:", error);
+    return null;
+  }
+}
+
 export async function createUser(user: Omit<User, "id" | "createdAt" | "updatedAt" | "deletedAt">) {
   try {
+    // Verifica se email já existe
+    const existingUser = await findUserByEmail(user.email);
+    if (existingUser) {
+      throw new Error("Email already exists");
+    }
+
     // Hash senha
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(user.password, saltRounds);
@@ -59,15 +81,20 @@ export async function createUser(user: Omit<User, "id" | "createdAt" | "updatedA
 
 export async function updateUser(id: number, user: Partial<User>) {
   try {
-    const { username } = user;
-    if (!username) {
-      return null;
-    }
     const validatedUser = userUpdateZodSchema.safeParse(user);
     if (!validatedUser.success) {
       console.error("Validation failed:", validatedUser.error);
       return null;
     }
+
+    // Se está atualizando email, verifica se já existe
+    if (validatedUser.data.email) {
+      const existingUser = await findUserByEmail(validatedUser.data.email);
+      if (existingUser && existingUser.id !== id) {
+        throw new Error("Email already exists");
+      }
+    }
+
     const updated = await db
       .update(usersTable)
       .set(validatedUser.data)
